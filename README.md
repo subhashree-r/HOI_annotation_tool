@@ -33,8 +33,9 @@ python  hoi_annotate_single_final.py
 ### Single Person videos
 1. The frame with action name (green), object/ object instances (blue) will be displayed.
 2. Press the button `1,2,3` that corresponds to the object that belongs to the person present in the frame and the action displayed.
-3. Press `b` if you have to go back in frames.
-4. When there are multiple instances of the same object, and all the instances belong to the person, press `a` to associate all of them to the person.
+3. From the next frame, it will start predicting the possible pair (in yellow), press `y` if it is the correct pair and  `n` to reject it and make a new annotation.
+4. Press `b` if you have to go back in frames.
+5. When there are multiple instances of the same object, and all the instances belong to the person, press `a` to associate all of them to the person.
 
 
 
