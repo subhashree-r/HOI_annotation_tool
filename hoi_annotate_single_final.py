@@ -11,7 +11,7 @@ from utils import *
 import requests
 import xml.etree.ElementTree as ET
 import pandas as pd
-from convert_xml_df import *
+# from convert_xml_df import *
 import shutil
 
 refPt = []
