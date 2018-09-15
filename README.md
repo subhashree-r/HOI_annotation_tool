@@ -8,11 +8,12 @@
 
 ## Directory structure
 
+```
 /hoi_vid
   /CharadesDet
   /charades
   /charades-algorithms
-
+```
 
 `mkdir hoi_vid`
 
