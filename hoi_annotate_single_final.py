@@ -92,7 +92,7 @@ for line in lines:
 	id_action[id] = action
 
 ################### Process the object labels ###############################
-f3 = open(os.path.join('/home/subha/hoi_vid/CharadesDet','charade_object_classes.txt'))
+f3 = open(os.path.join('CharadesDet','charade_object_classes.txt'))
 objects = f3.read().splitlines()
 def process_video(vid):
 	print "Processing", vid
