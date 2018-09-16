@@ -3,16 +3,17 @@ clear all;
 clc;
 
 % read video
-addpath('/home/subha/hoi_vid/mmread/');
-viddataset = '/home/subha/hoi_vid/CharadesDet/Charades_v1_480/';
-imgdataset = '/home/subha/hoi_vid/CharadesDet/val_videos_images_downscaled_new/';
+addpath('mmread/');
+viddataset = '/media/cooper/Data/hoi_data_labelling/CharadesDet/focus_videos_multiperson/';
+imgdataset = '/media/cooper/Data/hoi_data_labelling/CharadesDet/val_videos_images_downscaled_new/';
+
 if ~exist(imgdataset,'dir')
     mkdir(imgdataset);
 end
 
 file = dir(viddataset);
-
-for i = 1:9848
+A = size(file);
+for i = 1:A(1)
     vidname = file(i+3).name;
     vidname = vidname(1:end-4);
     vidpath = [viddataset,vidname,'.mp4'];
@@ -31,6 +32,6 @@ for i = 1:9848
         imwrite(im,[impath,'/',im_name],'jpg');
     end
     end
-    i
+ 
 
 end
