@@ -29,7 +29,7 @@ vid_files = 'charades/Charades_v1/'
 val_vid = 'CharadesDet/Annotations'
 val_vid_folder = 'CharadesDet/val_videos'
 charades_annotation = 'charades/Charades'
-val_images = 'CharadesDet/val_videos_images_downscaled/'
+val_images = 'CharadesDet/val_videos_images_downscaled_new/'
 annotated_images = 'CharadesDet/val_videos_annotated_images_downscaled/'
 hoi_annotation  = 'CharadesDet/hoi_annotation_multi_person_final'
 check_and_create(annotated_images)
@@ -217,6 +217,9 @@ def process_video(vid):
 							cv2.putText(im_temp,object,(5,70), font, 0.6,(255,0,0),2)
 							cv2.imshow("image", im_temp)
 							key1 = cv2.waitKey(0) & 0xFF
+							if key1 == ord("0"):
+								frame_idx+=1
+								break
 							# if key1 == ord("b"):
 							# 	frame_idx-=1
 							# 	object_interactions.pop()
@@ -225,9 +228,7 @@ def process_video(vid):
 							if key1 == ord("y") or key1 == ord("n"):
 								key1 = cv2.waitKey(0) & 0xFF
 								key2 = cv2.waitKey(0) & 0xFF
-							if key1 == ord("0"):
-								frame_idx+=1
-								break
+
 							elif key1 == ord("b"):
 								object_interactions.pop()
 								back_frame =1
@@ -317,24 +318,18 @@ def main():
 
 	next_img = cv2.imread('next.png')
 	print "Starting code"
-	# args = parse_arguments()
-	# vid_id = args.vid_id
-	# p1 = threading.Thread(target = show_video(os.path.join(val_vid,'V2ZO4')))
-	# p1.start()
-	# p2 =  threading.Thread(target =process_video(os.path.join(val_vid,'V2ZO4')))
-	# p2.start()
-	# # p1.join()
-	# # p2.join()
-	# # process_video(os.path.join(val_vid,'WT46G'))
 	for v in os.listdir(val_vid):
 		if not os.path.isdir(os.path.join(hoi_annotation, v)):
-			process_video(os.path.join(val_vid,v))
-			cv2.imshow("image",next_img)
-			key = cv2.waitKey(0) & 0xFF
-			if key == ord("\n") or key == ord("y"):
-				continue
-			else:
-				break
+
+			if v in multi_person_vids:
+					process_video(os.path.join(val_vid,v))
+					cv2.imshow("image",next_img)
+					key = cv2.waitKey(0) & 0xFF
+					if key == ord("\n") or key == ord("y") or key == ord("1") or key == ord("2"):
+						continue
+					else:
+						break
+
 
 if __name__ == '__main__':
 	main()

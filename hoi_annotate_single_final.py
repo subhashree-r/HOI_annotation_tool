@@ -205,16 +205,21 @@ def main():
 
 	next_img = cv2.imread('next.png')
 	log_file = os.path.join(hoi_annotation,'log.txt')
+	single_file = open('single_person_videos.txt')
+	single_person_vids =  single_file.read().splitlines()
+	# print single_person_vids
 	f1 = open(log_file,'w+')
 	for v in os.listdir(val_vid):
+
 		if not os.path.isdir(os.path.join(hoi_annotation, v)):
-			process_video(os.path.join(val_vid,v))
-			cv2.imshow("image",next_img)
-			key = cv2.waitKey(0) & 0xFF
-			if key == ord("\n") or key == ord("y"):
-				continue
-			else:
-				break
+			if v in single_person_vids:
+				process_video(os.path.join(val_vid,v))
+				cv2.imshow("image",next_img)
+				key = cv2.waitKey(0) & 0xFF
+				if key == ord("\n") or key == ord("y") or key == ord("1") or key == ord("2"):
+					continue
+				else:
+					break
 
 
 if __name__ == '__main__':
