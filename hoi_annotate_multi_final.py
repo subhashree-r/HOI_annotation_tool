@@ -13,6 +13,9 @@ import xml.etree.ElementTree as ET
 import pandas as pd
 # from convert_xml_df import *
 import argparse
+from multiprocessing import Process
+import threading
+
 # initialize the list of reference points and boolean indicating
 # whether cropping is being performed or not
 refPt = []
@@ -94,10 +97,10 @@ for line in lines:
 f3 = open(os.path.join('CharadesDet','charade_object_classes.txt'))
 objects = f3.read().splitlines()
 # print objects
-
+cv2.namedWindow("image", cv2.WINDOW_NORMAL)
 
 def process_video(vid):
-	cv2.namedWindow("image", cv2.WINDOW_NORMAL)
+
 	frames = sorted(os.listdir(vid))
 	frames.sort(key=lambda f: int(filter(str.isdigit, f)))
 	# no_frames = max([float(f.split('.')[0]) for f in frames])
@@ -283,25 +286,55 @@ def process_video(vid):
 				writer  = csv.writer(out)
 				writer.writerows(object_annotations)
 
+def show_video(vid):
+	cv2.namedWindow("video", cv2.WINDOW_NORMAL)
+	frames = sorted(os.listdir(vid))
+	frames.sort(key=lambda f: int(filter(str.isdigit, f)))
+	vid_name = vid.split(os.path.sep)[-1]
+	actual_img_dir = os.path.join(val_images,vid_name)
+	no_frames = len(os.listdir(actual_img_dir))
+	for frame in frames:
+		frame_num = frame.split('.')[0]
+		# print frame_num
+		# frame_time = (float(df_row['length'])/float(no_frames))*float(frame_num)
+		img_name =os.path.join(val_images,vid_name,frame_num+'.jpg')
+		# print img_name
+		final_annotations = []
+		img = cv2.imread(img_name)
+		cv2.imshow("video",img)
+		cv2.waitKey(1)
 
 def parse_arguments():
 	parser = argparse.ArgumentParser(description="Siamese Tracking")
-	parser.add_argument("-v",
-		"--vid_id", help="Path to MOTChallenge directory (train or test)",
-		required=True)
+	# parser.add_argument("-v",
+	# 	"--vid_id", help="Path to MOTChallenge directory (train or test)",
+	# 	required=True)
 
 
 	return parser.parse_args()
 
 def main():
 
+	next_img = cv2.imread('next.png')
 	print "Starting code"
-	args = parse_arguments()
-	vid_id = args.vid_id
-	process_video(os.path.join(val_vid,vid_id))
-	# process_video(os.path.join(val_vid,'WT46G'))
-
-
+	# args = parse_arguments()
+	# vid_id = args.vid_id
+	# p1 = threading.Thread(target = show_video(os.path.join(val_vid,'V2ZO4')))
+	# p1.start()
+	# p2 =  threading.Thread(target =process_video(os.path.join(val_vid,'V2ZO4')))
+	# p2.start()
+	# # p1.join()
+	# # p2.join()
+	# # process_video(os.path.join(val_vid,'WT46G'))
+	for v in os.listdir(val_vid):
+		if not os.path.isdir(os.path.join(hoi_annotation, v)):
+			process_video(os.path.join(val_vid,v))
+			cv2.imshow("image",next_img)
+			key = cv2.waitKey(0) & 0xFF
+			if key == ord("\n") or key == ord("y"):
+				continue
+			else:
+				break
 
 if __name__ == '__main__':
 	main()

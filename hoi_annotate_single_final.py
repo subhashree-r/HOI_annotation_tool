@@ -203,9 +203,18 @@ def process_video(vid):
 			writer.writerows(object_annotations)
 def main():
 
+	next_img = cv2.imread('next.png')
 	log_file = os.path.join(hoi_annotation,'log.txt')
 	f1 = open(log_file,'w+')
-	process_video(os.path.join(val_vid,'Y79PC'))
+	for v in os.listdir(val_vid):
+		if not os.path.isdir(os.path.join(hoi_annotation, v)):
+			process_video(os.path.join(val_vid,v))
+			cv2.imshow("image",next_img)
+			key = cv2.waitKey(0) & 0xFF
+			if key == ord("\n") or key == ord("y"):
+				continue
+			else:
+				break
 
 
 if __name__ == '__main__':
