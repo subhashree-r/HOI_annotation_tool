@@ -41,7 +41,12 @@ Use the following code for transferring the video: Change the paths accordingly
 
 
 
+
 ### Multi Person Videos
 1. The frame with persons(red), objects(blue) will be displayed.
 2. Press then number for person `1,2,3` and the object instance that belongs to the person `1,2,3`.
 3. Press `b` if you have to go back in frame.
+
+
+### General Instructions
+1. After every video `Next` image comes. You can press `Enter` or `y` if you want to continue annotating next video. If you press any other key, it will exit the code. You can annotate later.
