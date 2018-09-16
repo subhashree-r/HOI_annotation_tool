@@ -21,6 +21,8 @@
 
 `git clone https://github.com/xiaolonw/CharadesDet.git`
 
+`cd .. and cd charades`
+
 `wget http://ai2-website.s3.amazonaws.com/data/Charades_v1_480.zip`
 
 ## Running Commands
