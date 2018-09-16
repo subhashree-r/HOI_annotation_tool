@@ -25,6 +25,20 @@
 
 `wget http://ai2-website.s3.amazonaws.com/data/Charades_v1_480.zip`
 
+Extract the above zip in the main_dir
+For Single_Person run;
+
+`python extract_files_singleperson.py`
+
+For Multi Person run;
+
+`python extract_files_multiperson.py`
+
+Now you will have focused videos in the two folders inside the CharadesDet directory.
+
+Give the path to this directory to matlab, extract_frame.m script
+
+
 ## Running Commands
 
 `python hoi_annotate_multi_final.py`
