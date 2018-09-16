@@ -24,8 +24,9 @@
 `wget http://ai2-website.s3.amazonaws.com/data/Charades_v1_480.zip`
 
 ## Running Commands
-python hoi_annotate_multi_final.py
-python  hoi_annotate_single_final.py
+
+`python hoi_annotate_multi_final.py`
+`python  hoi_annotate_single_final.py`
 
 Use the following code for transferring the video: Change the paths accordingly
 
