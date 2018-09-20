@@ -201,6 +201,10 @@ def process_video(vid):
 		with open(csv_file_obj,'wb') as out:
 			writer  = csv.writer(out)
 			writer.writerows(object_annotations)
+	if frame_idx == len(frames) and os.path.exists(os.path.join(hoi_annotation, vid_name)):
+		success_log_file = os.path.join(os.getcwd(),os.path.join(hoi_annotation,vid_name,'log_success.txt'))
+		with open(success_log_file,"w+") as f:
+			f.write("success")
 def main():
 
 	next_img = cv2.imread('next.png')
@@ -211,7 +215,7 @@ def main():
 	f1 = open(log_file,'w+')
 	for v in os.listdir(val_vid):
 
-		if not os.path.isdir(os.path.join(hoi_annotation, v)):
+		if not os.path.exists(os.path.join(hoi_annotation, v,'log_success.txt')):
 			if v in single_person_vids:
 				process_video(os.path.join(val_vid,v))
 				cv2.imshow("image",next_img)

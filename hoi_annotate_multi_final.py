@@ -287,6 +287,11 @@ def process_video(vid):
 				writer  = csv.writer(out)
 				writer.writerows(object_annotations)
 
+	if frame_idx == len(frames) and os.path.exists(os.path.join(hoi_annotation, vid_name)):
+		success_log_file = os.path.join(os.getcwd(),os.path.join(hoi_annotation,vid_name,'log_success.txt'))
+		with open(success_log_file,"w+") as f:
+			f.write("success")
+
 def show_video(vid):
 	cv2.namedWindow("video", cv2.WINDOW_NORMAL)
 	frames = sorted(os.listdir(vid))
@@ -319,7 +324,7 @@ def main():
 	next_img = cv2.imread('next.png')
 	print "Starting code"
 	for v in os.listdir(val_vid):
-		if not os.path.isdir(os.path.join(hoi_annotation, v)):
+		if not os.path.exists(os.path.join(hoi_annotation, v,'log_success.txt')):
 
 			if v in multi_person_vids:
 					process_video(os.path.join(val_vid,v))
