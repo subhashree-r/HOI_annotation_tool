@@ -216,26 +216,37 @@ def process_video(vid):
 							cv2.putText(im_temp,'person',(5,50), font, 0.5,(0,0,255),2)
 							cv2.putText(im_temp,object,(5,70), font, 0.6,(255,0,0),2)
 							cv2.imshow("image", im_temp)
+							print "Press person key"
 							key1 = cv2.waitKey(0) & 0xFF
+
 							if key1 == ord("0"):
 								frame_idx+=1
 								break
+
 							# if key1 == ord("b"):
 							# 	frame_idx-=1
 							# 	object_interactions.pop()
 							# 	break
-							key2 = cv2.waitKey(0) & 0xFF
-							if key1 == ord("y") or key1 == ord("n"):
-								key1 = cv2.waitKey(0) & 0xFF
-								key2 = cv2.waitKey(0) & 0xFF
+							# key2 = cv2.waitKey(0) & 0xFF
+							# if key1 == ord("y") or key1 == ord("n"):
+							# 	key1 = cv2.waitKey(0) & 0xFF
+							# 	key2 = cv2.waitKey(0) & 0xFF
 
 							elif key1 == ord("b"):
 								object_interactions.pop()
 								back_frame =1
 								frame_idx -=1
 								break
-							elif len(object_instances)==1 and key1 in person_keys :
 
+							while key1 not in person_keys:
+								print "Press again the person key"
+								key1 = cv2.waitKey(0) & 0xFF
+							if len(object_instances)==1 and key1 in person_keys :
+								print "Press object key"
+								key2 = cv2.waitKey(0) & 0xFF
+								while key2!=ord("1"):
+									print "Press again the object key"
+									key2 = cv2.waitKey(0) & 0xFF
 								ann_tmp = [fa]
 								ann_tmp.extend(map(int,person_ann[int(chr(key1))-1][1:]))
 								# if len(object_instances)==1:
@@ -245,10 +256,15 @@ def process_video(vid):
 								# break
 							elif len(object_instances)>1:
 									# key2 = cv2.waitKey(33) & 0xFF
+									obj_keys = [ord(str(i+1)) for i in range(len(object_instances))]
+
 									key_p = int(chr(key1))
+
 									# cv2.putText(im_temp,'Press person and object numbers',(5,70), font, 0.5,(0,255,0),2)
 									key2 = cv2.waitKey(0) & 0xFF
-
+									while key2 not in obj_keys:
+										print "Press again the object key"
+										key2 = cv2.waitKey(0) & 0xFF
 									if key2 == ord("a"):
 										for k in range(len(object_instances)):
 											ann_tmp = [fa]
