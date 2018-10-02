@@ -103,6 +103,7 @@ def process_video(vid):
 
 	frames = sorted(os.listdir(vid))
 	frames.sort(key=lambda f: int(filter(str.isdigit, f)))
+	print frames
 	# no_frames = max([float(f.split('.')[0]) for f in frames])
 	vid_name = vid.split(os.path.sep)[-1]
 	actual_img_dir = os.path.join(val_images,vid_name)
@@ -151,6 +152,7 @@ def process_video(vid):
 		p_id_bbx = {}
 		p_id = 1
 		im_person = im.copy()
+		print person_ann
 		for p_bb in reversed(person_ann):
 			ann_tmp=[]
 			bb = map(int,p_bb[1:])
@@ -159,7 +161,7 @@ def process_video(vid):
 			p_id_bbx[p_id]=bb
 			p_id+=1
 		person_keys  = [ord(str(i+1)) for i in range(len(person_ann))]
-
+		print p_id_bbx
 		if not (person_ann and object_action):
 			frame_idx+=1
 		elif person_ann and object_action:
@@ -188,7 +190,12 @@ def process_video(vid):
 
 						bb_o = map(int,object_instances[0][1:])
 						# print vid_action_person
-						bb_p = p_id_bbx[vid_action_person[fa]]
+						# print vid_action_person[fa]
+						# print p_id_bbx
+						try:
+							bb_p = p_id_bbx[vid_action_person[fa]]
+						except:
+							bb_p = p_id_bbx[1]
 
 						for bb in [bb_o,bb_p]:
 							cv2.rectangle(im_temp1, (bb[0],bb[1]),(bb[2],bb[3]),(0,255,255),2)
@@ -339,6 +346,9 @@ def main():
 
 	next_img = cv2.imread('next.png')
 	print "Starting code"
+	# for v in os.listdir(val_vid):
+
+	# for v in ['08LOY']:
 	for v in os.listdir(val_vid):
 		if not os.path.exists(os.path.join(hoi_annotation, v,'log_success.txt')):
 
