@@ -103,7 +103,7 @@ def process_video(vid):
 
 	frames = sorted(os.listdir(vid))
 	frames.sort(key=lambda f: int(filter(str.isdigit, f)))
-	print frames
+	# print frames
 	# no_frames = max([float(f.split('.')[0]) for f in frames])
 	vid_name = vid.split(os.path.sep)[-1]
 	actual_img_dir = os.path.join(val_images,vid_name)
@@ -115,9 +115,11 @@ def process_video(vid):
 	# no_frames = len(frames)
 	frame_idx = 0
 	while frame_idx < len(frames):
+		# print frame_idx
 		frame = frames[frame_idx]
-		print frame
+		# print frame
 		back_frame = 0
+		skip_frame = 0
 		p_idxes = []
 		ann = parse_xml(os.path.join(vid,frame))
 		object_annotations = [['Object Name','xmin','ymin','xmax','ymax','xmin','ymin','xmax','ymax']]
@@ -129,7 +131,7 @@ def process_video(vid):
 		# print frame_num
 		frame_time = (float(df_row['length'])/float(no_frames))*float(frame_num)
 		img_name =os.path.join(val_images,vid_name,frame_num+'.jpg')
-		print img_name
+		# print img_name
 		final_annotations = []
 		img = cv2.imread(img_name)
 		im = img.copy()
@@ -152,7 +154,7 @@ def process_video(vid):
 		p_id_bbx = {}
 		p_id = 1
 		im_person = im.copy()
-		print person_ann
+		# print person_ann
 		for p_bb in reversed(person_ann):
 			ann_tmp=[]
 			bb = map(int,p_bb[1:])
@@ -161,7 +163,7 @@ def process_video(vid):
 			p_id_bbx[p_id]=bb
 			p_id+=1
 		person_keys  = [ord(str(i+1)) for i in range(len(person_ann))]
-		print p_id_bbx
+		# print p_id_bbx
 		if not (person_ann and object_action):
 			frame_idx+=1
 		elif person_ann and object_action:
@@ -201,6 +203,11 @@ def process_video(vid):
 							cv2.rectangle(im_temp1, (bb[0],bb[1]),(bb[2],bb[3]),(0,255,255),2)
 						cv2.imshow("image", im_temp1)
 						key1 = cv2.waitKey(0) & 0xFF
+
+						if key1 == ord("0"):
+							# frame_idx+=1
+							skip_frame=1
+							break
 						if key1 == ord("b"):
 							object_interactions.pop()
 							frame_idx-=1
@@ -227,7 +234,8 @@ def process_video(vid):
 							key1 = cv2.waitKey(0) & 0xFF
 
 							if key1 == ord("0"):
-								frame_idx+=1
+								# frame_idx+=1
+								skip_frame =1
 								break
 
 							# if key1 == ord("b"):
@@ -268,29 +276,42 @@ def process_video(vid):
 									key_p = int(chr(key1))
 
 									# cv2.putText(im_temp,'Press person and object numbers',(5,70), font, 0.5,(0,255,0),2)
+									print "Press {} object key".format(1)
 									key2 = cv2.waitKey(0) & 0xFF
-									while key2 not in obj_keys:
-										print "Press again the object key"
-										key2 = cv2.waitKey(0) & 0xFF
 									if key2 == ord("a"):
 										for k in range(len(object_instances)):
 											ann_tmp = [fa]
 											ann_tmp.extend(map(int,person_ann[key_p-1][1:]))
 											ann_tmp.extend(map(int,object_instances[k][1:]))
 											object_interactions.append(ann_tmp)
-											# frame_idx+=1
-										# break
 									else:
-										key_o = int(chr(key2))
-										print "key1",key_p,key_o
-										ann_tmp = [fa]
-										ann_tmp.extend(map(int,person_ann[key_p-1][1:]))
-										ann_tmp.extend(map(int,object_instances[key_o-1][1:]))
-										object_interactions.append(ann_tmp)
+										while key2 not in obj_keys:
+											print "Press again the object key"
+											key2 = cv2.waitKey(0) & 0xFF
+
+										obj_ins = 0
+										obj_keys.append(ord("\n"))
+										while key2 != ord('\n') and obj_ins<(len(object_instances)-1):
+
+												print "Press {} object key".format(obj_ins+2)
+												obj_ins+=1
+												# key2 = cv2.waitKey(0) & 0xFF
+
+												key_o = int(chr(key2))
+												print "key1",key_p,key_o
+												ann_tmp = [fa]
+												ann_tmp.extend(map(int,person_ann[key_p-1][1:]))
+												ann_tmp.extend(map(int,object_instances[key_o-1][1:]))
+												object_interactions.append(ann_tmp)
+												key2 = cv2.waitKey(0) & 0xFF
+												while key2 not in obj_keys:
+													print "Press again the object key"
+													key2 = cv2.waitKey(0) & 0xFF
 										# frame_idx+=1
 							vid_action_person[fa] = int(chr(key1))
-							frame_idx+=1
+							# frame_idx+=1
 							break
+
 				if back_frame:
 					break
 
@@ -310,6 +331,8 @@ def process_video(vid):
 				writer  = csv.writer(out)
 				writer.writerows(object_annotations)
 
+
+	print len(frames), frame_idx
 	if frame_idx == len(frames) and os.path.exists(os.path.join(hoi_annotation, vid_name)):
 		success_log_file = os.path.join(os.getcwd(),os.path.join(hoi_annotation,vid_name,'log_success.txt'))
 		with open(success_log_file,"w+") as f:
@@ -348,7 +371,7 @@ def main():
 	print "Starting code"
 	# for v in os.listdir(val_vid):
 
-	# for v in ['08LOY']:
+	# for v in ['FTNCO']:
 	for v in os.listdir(val_vid):
 		if not os.path.exists(os.path.join(hoi_annotation, v,'log_success.txt')):
 
