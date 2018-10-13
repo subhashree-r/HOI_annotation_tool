@@ -35,7 +35,10 @@ hoi_annotation  = 'CharadesDet/hoi_annotation_multi_person_final'
 check_and_create(annotated_images)
 check_and_create(hoi_annotation)
 val_vid_names = os.listdir(val_vid)
+
+###### This is the text file you need to change the text file path to ######################################
 f = open('multi_person_vids.txt')
+#############################################################################################################
 multi_person_vids =  f.read().splitlines()
 
 test_csv = os.path.join(charades_annotation,'Charades_v1_test.csv')
@@ -259,6 +262,8 @@ def process_video(vid):
 							if len(object_instances)==1 and key1 in person_keys :
 								print "Press object key"
 								key2 = cv2.waitKey(0) & 0xFF
+
+
 								while key2!=ord("1"):
 									print "Press again the object key"
 									key2 = cv2.waitKey(0) & 0xFF
@@ -372,17 +377,24 @@ def main():
 	# for v in os.listdir(val_vid):
 
 	# for v in ['FTNCO']:
-	for v in os.listdir(val_vid):
+	for v in tqdm(os.listdir(val_vid)):
 		if not os.path.exists(os.path.join(hoi_annotation, v,'log_success.txt')):
 
 			if v in multi_person_vids:
-					process_video(os.path.join(val_vid,v))
-					cv2.imshow("image",next_img)
-					key = cv2.waitKey(0) & 0xFF
-					if key == ord("\n") or key == ord("y") or key == ord("1") or key == ord("2"):
-						continue
-					else:
-						break
+
+					val_video = os.path.join(val_images,v)
+					print val_video
+					if os.path.isdir(val_video):
+						print "processing"
+						process_video(os.path.join(val_vid,v))
+						cv2.imshow("image",next_img)
+						key = cv2.waitKey(0) & 0xFF
+						if key == ord("\n") or key == ord("y") or key == ord("1") or key == ord("2"):
+							continue
+						else:
+							break
+					# else:
+					# 	print "not present"
 
 
 if __name__ == '__main__':
